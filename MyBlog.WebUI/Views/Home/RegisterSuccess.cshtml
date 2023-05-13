@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Kayıt başarılı";
+}
+
+@* HtmlHelper metodu ile Html.BeginForm() kullanarak form tagini oluşturuyorum. *@
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-7">
+                <div class="bg-success text-white p-3 mb-2 rounded-2">
+                    <h3 class="text-center">Yönlendiriliyorsunuz...</h3>
+                </div>
+                <br />
+                
+                <div>
+                    <h3 class="text-center"> Kayıt oldunuz...</h3>
+                    <br />
+                    <p>
+                        Lütfen E-Posta adresinize gönderilen aktivasyon linkini kullanarak hesabınızı aktif hale getiriniz. Hesabınızı aktive etmeden sisteme giriş yapamayacaksınız, yorum ekleyemeyeceksiniz, beğeni yapamayacaksınız.
+                    </p>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+<script>
+setTimeout(function(){
+    window.location = "/Home/Index";
+}, 5000);
+
+</script>

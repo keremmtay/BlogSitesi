@@ -1,0 +1,29 @@
+﻿@model List<Note>
+
+@foreach (Note note in Model)
+{
+    <div class="d-flex">
+        <div class="flex-grow-1 ms-3">
+            <div class="row">
+                <div>
+                    <span id="note_text_@note.Id">
+                        <h3>@note.Title</h3>
+                        <hr />
+
+                        <div>
+                            <img src="~/images/CarouselImages/Reagan.jpg" width="450px" alt="" />
+                        </div>
+                        <hr />
+                        @note.Text
+                    </span>
+                </div>
+            </div>
+            <hr />
+
+            <div class="d-flex justify-content-between">
+                <h5 class="small"><i class="bi bi-calendar-fill"></i> @note.ModifiedDate</h5>
+                <h5 class="small"><i class="bi bi-person-fill"></i> @note.ModifiedUserName</h5>
+            </div>
+        </div>
+    </div>
+}

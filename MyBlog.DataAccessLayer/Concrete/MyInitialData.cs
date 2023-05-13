@@ -1,0 +1,188 @@
+﻿using Microsoft.EntityFrameworkCore;
+using MyBlog.Entities.Concrete;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyBlog.DataAccessLayer.Concrete
+{
+    public class MyInitialData
+    {
+        // Fake datalar burada hazırlanacak
+
+        public static void Seed()
+        {
+            MyBlogContext context = new MyBlogContext();
+
+            if (context.Database.GetPendingMigrations().Count() > 0) 
+            { 
+                context.Database.Migrate();
+            }
+
+            if (context.Database.GetPendingMigrations().Count() == 0)
+            {
+                if (context.BlogUsers.Count() == 0)
+                {
+                    // Tabloda veri yok ise buradaki kodlar çalışacak
+                    // Öncelikle 2 tane user oluşturuyorum
+
+                    BlogUser admin = new BlogUser()
+                    {
+                        Name = "Admin",
+                        Surname = "Admin",
+                        UserProfileImage = "user-profile.jpg",
+                        Email = "admin@admin.com",
+                        ActivateGuid = Guid.NewGuid(),
+                        IsActive = true,
+                        IsAdmin = true,
+                        UserName = "admin",
+                        Password = "123",
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUserName = "admin",
+                    };
+
+                    BlogUser standardUser = new BlogUser()
+                    {
+                        Name = "User",
+                        Surname = "User",
+                        UserProfileImage = "user-profile.jpg",
+                        Email = "user@user.com",
+                        ActivateGuid = Guid.NewGuid(),
+                        IsActive = true,
+                        IsAdmin = false,
+                        UserName = "user",
+                        Password = "123",
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUserName = "user",
+                    };
+
+                    context.BlogUsers.Add(admin);
+                    context.BlogUsers.Add(standardUser);
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        BlogUser user = new BlogUser()
+                        {
+                            Name = FakeData.NameData.GetFirstName(),
+                            Surname = FakeData.NameData.GetSurname(),
+                            UserProfileImage = "user-profile.jpg",
+                            Email = FakeData.NetworkData.GetEmail(),
+                            ActivateGuid = Guid.NewGuid(),
+                            IsActive = true,
+                            IsAdmin = false,
+                            UserName = $"user-{i}",
+                            Password = "123",
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now.AddMinutes(5),
+                            ModifiedUserName = $"user-{i}",
+                        };
+
+                        context.BlogUsers.Add(user);
+                    }
+
+                    context.SaveChanges();
+                }
+
+                // Kullanıcı listesini veritabanından çekeceğim ve Note, Comment gibi dataları oluştururken bu kullanıcıları kullanacağım.
+
+                List<BlogUser> userList = context.BlogUsers.ToList();
+
+                // Fake Kategori üretelim
+
+                if (context.Categories.Count() == 0)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Category category = new Category()
+                        {
+                            Name = FakeData.PlaceData.GetCountry(),
+                            Description = FakeData.PlaceData.GetAddress(),
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate= DateTime.Now.AddMinutes(5),
+                            ModifiedUserName = "admin"
+                        };
+
+                        context.Categories.Add(category);
+
+                        // Fake Not üretelim
+
+                        for (int j = 0; j < FakeData.NumberData.GetNumber(3,15); j++)
+                        {
+                            BlogUser user_note = userList[FakeData.NumberData.GetNumber(0, userList.Count - 1)];
+
+                            Note note = new Note()
+                            {
+                                Title = FakeData.PlaceData.GetCity(),
+                                Text = FakeData.TextData.GetSentences(FakeData.NumberData.GetNumber(1,4)),
+                                Category = category,
+                                IsDraft = false,
+                                LikeCount = FakeData.NumberData.GetNumber(1,12),
+                                CreatedDate = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-2), DateTime.Now),
+                                ModifiedDate = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-2), DateTime.Now),
+                                ModifiedUserName=user_note.UserName,
+                                BlogUser = user_note,
+                            };
+
+                            category.Notes.Add(note);
+
+                            // Fake yorumlar eklenecek Comment tablsouna
+
+                            for (int k = 0; k < FakeData.NumberData.GetNumber(4,15); k++)
+                            {
+                                BlogUser user_comment = userList[FakeData.NumberData.GetNumber(0, userList.Count - 1)];
+
+                                Comment comment = new Comment()
+                                {
+                                    Text = FakeData.TextData.GetSentence(),
+                                    BlogUser = user_comment,
+                                    CreatedDate = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-2), DateTime.Now),
+                                    ModifiedDate = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-2), DateTime.Now),
+                                    ModifiedUserName = user_comment.UserName
+                                };
+
+                                note.Comments.Add(comment);
+                            }
+
+                            // Fake Like datası
+
+                            for (int m = 0; m < note.LikeCount; m++)
+                            {
+                                Liked liked = new Liked()
+                                {
+                                    LikedUser = user_note,
+                                };
+
+                                note.Likes.Add(liked);
+                            }
+
+                            context.SaveChanges();
+                        }
+                    }
+                }
+
+                if (context.CarouselPics.Count() == 0)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        CarouselPic carouselPic = new CarouselPic()
+                        {
+                            Name = FakeData.NameData.GetFirstName() + ".jpg",
+                            Description = FakeData.TextData.GetSentence(),
+                            Title = FakeData.PlaceData.GetCity(),
+                            MainPage = FakeData.BooleanData.GetBoolean()
+                        };
+
+                        context.CarouselPics.Add(carouselPic);
+                    }
+
+                    context.SaveChanges();
+                }
+                
+            }
+        }
+    }
+}

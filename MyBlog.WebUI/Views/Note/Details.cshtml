@@ -1,0 +1,72 @@
+﻿@model MyBlog.Entities.Concrete.Note
+
+@{
+    ViewData["Title"] = "Not Bilgileri";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1>Ayrıntılar</h1>
+            <hr />
+            <div>
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Title)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Title)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Text)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Text)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.IsDraft)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.IsDraft)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.LikeCount)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.LikeCount)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Category)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Category.Description)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.CreatedDate)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.CreatedDate)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.ModifiedDate)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.ModifiedDate)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.ModifiedUserName)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.ModifiedUserName)
+                    </dd>
+                </dl>
+            </div>
+            <div>
+                <a asp-action="Edit" class="btn btn-primary btn-sm" asp-route-id="@Model?.Id">Düzenle</a>
+                <a asp-action="Index" class="btn btn-primary btn-sm">Tüm Notlar</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+

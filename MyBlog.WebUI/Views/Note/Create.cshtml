@@ -1,0 +1,44 @@
+﻿@model MyBlog.Entities.Concrete.Note
+
+@{
+    ViewData["Title"] = "Yeni Not Ekle";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1>Not Ekle</h1>
+            <hr />
+            <div class="row">
+                <div>
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-floating my-3">
+                            <input asp-for="Title" type="text" class="form-control" placeholder="Başlık" />
+                            <label asp-for="Title" class="control-label"></label>
+                        </div>
+                        <div class="form-floating my-3">
+                            <input asp-for="Text" type="text" class="form-control" placeholder="Metin" />
+                            <label asp-for="Text" class="control-label"></label>
+                        </div>
+                        <div class="form-group form-check mb-6">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
+                            </label>
+                        </div>
+                        <div class="form-floating my-3">
+                            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                            <label asp-for="CategoryId" class="control-label"></label>
+                        </div>
+                        <div class="form-group my-3">
+                            <input type="submit" value="Kaydet" class="btn btn-primary btn-sm" />
+                            &nbsp;&nbsp;&nbsp;
+                            <a asp-action="Index" class="btn btn-primary btn-sm">Notlarım</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

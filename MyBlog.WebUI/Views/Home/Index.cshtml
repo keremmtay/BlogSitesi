@@ -1,0 +1,200 @@
+﻿@model List<Note>
+
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <div class="row">
+
+            <!-- Kategoriler ComponentView ile geliyor -->
+            <div class="col-3">
+                @await Component.InvokeAsync("Category")
+
+            </div>
+            <div class="col-9">
+
+                @await Component.InvokeAsync("CarouselPic")
+
+                <!-- Blog entries-->
+                <!-- Paylaşılan postlar-->
+
+                <div class="row">
+                    @foreach (var note in Model)
+                    {
+                        <div class="col-4" data-note-id="@note.Id">
+                            <!-- Blog post-->
+                            <div class="card mb-4">
+                                <a href="#!"><img class="card-img-top" src="~/images/CarouselImages/visualsofdana-T5pL6ciEn-I-unsplash.jpg" alt="..." data-bs-toggle="modal" data-bs-target="#showNote" data-note-id="@note.Id" /></a>
+                                <div class="card-body">
+                                    <h2 class="card-title h4">
+                                        <a href="#" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#showNote" data-note-id="@note.Id">@note.Title</a>
+                                    </h2>
+                                    <p class="card-text">
+                                        @if (!string.IsNullOrEmpty(note.Text) && note.Text.Length > 100)
+                                        {
+                                            @note.Text.Substring(0,90)
+                                            <br />
+                                            <a href="" style="text-decoration:none" class="float-end" data-bs-toggle="modal" data-bs-target="#showNote" data-note-id="@note.Id"> ... devamı <i class="bi bi-arrow-right-square"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @note.Text
+                                        }
+
+                                    </p>
+                                    <hr />
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="small text-muted"><i class="bi bi-calendar-fill"></i> @note.ModifiedDate</h5>
+                                        <h5 class="small text-muted"><i class="bi bi-person-fill"></i> @note.ModifiedUserName</h5>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-sm btn-outline-secondary" type="submit" data-liked="false" data-note-id="@note.Id">
+                                            <i class="bi bi-heart text-danger like-heart"></i>
+                                            <span class="like-count">@note.LikeCount</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary btn-danger text-white" type="submit" data-bs-toggle="modal" data-bs-target="#showComments" data-note-id="@note.Id"><i class="bi bi-chat-left-text-fill"></i> Yorumlar</button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </main>
+</div>
+
+
+@*Modal'i buraya ekliyorum.. yani sayfanın en altına
+
+Modal'ı çalıştıracak bir tane butona ihtiycım var. Bootstrap sayfasında bu buton hali hazırda var. Fakat ben yorumların görüntülenmesinde kullanacağım için, bootstrapdeki buton yerine her bir noteda görülen yorumlar butonunu kullanacağım.
+
+*@
+
+<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>*@
+
+
+<!-- Modal Note -->
+<div class="modal fade" id="showNote" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Not Detayı</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-note-body">
+                @Html.Partial("_PartialNoteDetails")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Comment -->
+<div class="modal fade" id="showComments" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Yorumlar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-comment-body">
+                @*@Html.Partial("_PartialComments")*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/comment.js"></script>
+<script src="~/js/note.js"></script>
+
+
+<script>
+    $(function () {
+    @*data-note-id attribute'ne sahip bütün divleri elde etmem lazım..*@
+            var noteids = [];
+    @*i index'i temsil ediyor. e de elementi temsil ediyor.*@
+            $("div[data-note-id]").each(function (i, e) {
+                noteids.push($(e).data("note-id"));
+            });
+
+        console.log(noteids);
+    @*ajax isteği başlatıyorum..*@
+            $.ajax({
+                method: "POST",
+                url: "/Note/GetLiked",
+                data: { ids: noteids }
+            }).done(function (data) {
+                if (data.result != null && data.result.length > 0) {
+                    console.log(data.result);
+                    for (var i = 0; i < data.result.length; i++) {
+                        var id = data.result[i];
+                        var likedNote = $("div[data-note-id=" + id + "]");
+    @*div[data - note - id=55]*@
+                    var btn = likedNote.find("button[data-liked]");
+                        var itag = btn.find("i.like-heart");
+
+                        btn.data("liked", true);
+                        itag.removeClass("bi-heart");
+                        itag.addClass("bi-heart-fill");
+                    }
+                }
+            }).fail(function () {
+                alert("Sunucuyla bağlantı kurulamadı..");
+            });
+
+    @*Beğenme ile ilgili  ile işlemler  *@
+            $("button[data-liked]").click(function () {
+                var btn = $(this);  // click'lediğim butonu btn içine alıyorum..
+
+                var liked = btn.data("liked");
+                var noteid = btn.data("note-id");
+                var itag = btn.find("i.like-heart");
+                var spanCount = btn.find("span.like-count");
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Note/SetNoteLike",
+                    data: { "noteid": noteid, "liked": !liked }
+                }).done(function (data) {
+                    if (data.hasError) {
+                        alert(data.errorMessage);
+                    }
+                    else {
+                        liked = !liked;
+                        btn.data("liked", liked);
+                        spanCount.text(data.result); @*Actiondan gelen likecount değeri*@
+                            itag.removeClass("bi-heart");
+                        itag.removeClass("bi-heart-fill");
+
+                        if (liked) {
+                            itag.addClass("bi-heart-fill");
+                        }
+                        else {
+                            itag.addClass("bi-heart");
+                        }
+                    }
+
+                }).fail(function () {
+                    alert("Sunucuyla bağlantı kurulamadı..");
+                });
+            });
+    });
+
+</script>
+

@@ -1,0 +1,15 @@
+﻿Haftasonu ödev
+
+		1 - Carousel fotoğraf ekle, 
+		- Entity oluştur ingilizce olarak
+		- Id - Foto Adı - Foto Açıklaması - Foto Başlık - Anasayfada görünüp görünmemesi true false
+		- Sadece Admin müdahele edebilecek, Yönetim'in altında sadece o görebilecek Anasayfa Fotoları şeklinde
+		- Topple nesnesini kullanarak Index'e gönder VEYA component yapısıyla
+
+		2 - AdminBlogUser Controller... Yönetim altında Kullanıcılara tıklayınca tüm kullanıcılar gelecek. Create - Update - Delete yapılacak. Fotoğraf upload olmayacak. Admin rolü verilebilecek.
+
+
+Hocanın 1- Carousel için Fotoğraf eklenmesi gerekiyor... Bunun için ilgili Entity Classları oluşturulacak
+		- Manager sınıfı oluşturulacak
+		- Create, Update, Delete ilgili Action ve Viewler tasarlanacak
+		- Carousel, component yapısında oluşturulacak. Tıpkı kategori gibi. Index sayfasına eklenecek.
