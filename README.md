@@ -1,6 +1,6 @@
 # MyBlog
 
-C#, Katmanlı mǫmarǫ, Sǫngleton, Generǫc Reposǫtory, Ms-Sql, EF
-Code Fǫrst, JavaScrǫpt, JQuery, Bootstrap
-Üye kayıt/sǫlme, profǫl düzenleme ǫşlemlerǫ, üyelerǫn paylaşım
-yapabǫlme, yorum yapabǫlme, paylaşımları beğenebǫlmesǫ
+C#, Katmanlı mimari, Singleton, Generic Repository, Ms-Sql, EF Code First, JavaScript, JQuery, Bootstrap
+
+
+Üye kayıt/silme, profil düzenleme işlemleri, üyelerin paylaşımyapabilme, yorum yapabilme, paylaşımları beğenebilmesi
